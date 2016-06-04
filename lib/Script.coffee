@@ -26,10 +26,11 @@ handler = ( script, calls ) ->
 class Script
   constructor : ->
     @symbols = _.extend symbols
+    @binding = {}
     @context = new Context()
     @context.push @symbols
     @context.push @
-    @binding = {}
+    @context.push @binding
 
   evaluate : ( input ) =>
     tokens = CoffeeScript.tokens input

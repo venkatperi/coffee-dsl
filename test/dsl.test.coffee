@@ -9,8 +9,8 @@ class CopyTask
 class Test extends Script
   constructor : ->
     super()
+    @binding.Copy = CopyTask
     @_ext = {}
-    @symbols.Copy = CopyTask
     @context.push @_ext
 
   ext : ( f ) => f()

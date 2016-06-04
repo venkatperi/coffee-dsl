@@ -10,7 +10,7 @@
   "dependencies": {
   },
   "bundleDependencies": [],
-  "main": "dist/index",
+  "main": "dist/lib/Script",
   "scripts": {
     "prepublish": "grunt",
     "test": "mocha && istanbul report text-summary lcov && rm -rf ./coverage"
