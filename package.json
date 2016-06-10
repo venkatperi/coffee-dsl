@@ -1,16 +1,23 @@
 {
-  "name": "jsdsl",
+  "name": "coffee-dsl",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/venkatperi/jsdsl.git"
+    "url": "https://github.com/venkatperi/coffee-dsl.git"
   },
   "preferGlobal": false,
   "description": "NEEDS DESCRIPTION",
   "dependencies": {
+    "esprima": "^2.7.2",
+    "esquery": "^0.4.0",
+    "jsome": "^2.3.24",
+    "pretty-hrtime": "^1.0.2",
+    "taglog": "^1.1.0",
+    "tosource": "^1.0.0",
+    "what-class": "^0.2.0"
   },
   "bundleDependencies": [],
-  "main": "dist/lib/Script",
+  "main": "lib/Script",
   "scripts": {
     "prepublish": "grunt",
     "test": "mocha && istanbul report text-summary lcov && rm -rf ./coverage"
@@ -27,12 +34,13 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-exec": "^0.4.6",
     "grunt-istanbul": "^0.7.0",
-    "lodash": "^4.12.0",
+    "json-pretty": "0.0.1",
     "json-stringify-safe": "^5.0.1",
+    "lodash": "^4.12.0",
+    "prettyjson": "^1.1.3",
     "should": "^8.3.1"
   },
   "author": "Venkat Peri <venkatperi@gmail.com> (http://www.vperi.com/)",
   "license": "MIT",
-  "keywords": [
-  ]
+  "keywords": []
 }

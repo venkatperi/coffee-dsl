@@ -1,6 +1,5 @@
 println b
-ext ->
-  b = 3
+b = 3
 
 println b
 
