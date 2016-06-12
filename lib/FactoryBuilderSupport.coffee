@@ -19,7 +19,7 @@ CURRENT_NAME = '_CURRENT_NAME_'
 CHILD_BUILDER = '_CHILD_BUILDER_'
 
 isFunction = ( f ) ->
-  f.type is 'function' or _.isFunction(f)
+  f?.type is 'function' or _.isFunction(f)
 
 class FactoryBuilderSupport extends JSInterpreter
 
