@@ -5,7 +5,7 @@ getClass = require 'what-class'
 {inspect} = require './util/util'
 rek = require 'rekuire'
 log = rek('logger')(require('path').basename(__filename).split('.')[0])
-log.level 'verbose'
+#log.level 'verbose'
 
 CURRENT_NODE = '_CURRENT_NODE_'
 PARENT_FACTORY = '_PARENT_FACTORY_'
@@ -48,10 +48,6 @@ class FactoryBuilderSupport extends JSInterpreter
     @factories = new Map()
     @explicitProperties = new Map()
     @explicitMethods = new Map()
-    #@current = undefined # current node
-    #@currentFactory = undefined # factory that built current node
-    #@currentBuilder = undefined
-    #@childBuilder = undefined
     @globalProxyBuilder = @
     @preInstantiateDelegates = []
     @postInstantiateDelegates = []
@@ -206,6 +202,9 @@ class FactoryBuilderSupport extends JSInterpreter
     @proxyBuilder.currentFactory.onNodeCompleted @proxyBuilder.childBuilder, parent, node
 
   setParent : ( parent, child ) =>
+    #log.i 'setParent', parent.name, child.name
+    #console.log parent unless parent.name
+    #console.log child unless child.name
     @proxyBuilder.currentFactory.setParent @proxyBuilder.childBuilder, parent, child
     parentFactory = @proxyBuilder.parentFactory
     if parentFactory
