@@ -1,6 +1,7 @@
 {Interpreter, DefaultDelegate} = require 'JS-Interpreter'
 util = require 'util'
 compileCoffee = require './compile-coffee'
+Q = require 'q'
 
 println = -> console.log.apply console, Array.from arguments
 
@@ -14,12 +15,14 @@ class JSInterpreter extends DefaultDelegate
 
     @interpreter = new Interpreter code, ( ip, scope ) =>
       @scope = scope
-      ip.setProperty scope, 'delegate', @ 
+      ip.setProperty scope, 'delegate', @
       ip.setNativeFn scope, 'println', println
 
-    @run()
+    @asyncRun()
 
-  run : => @interpreter.run()
+  asyncRun : =>
+    new Q.Promise ( resolve, reject ) =>
+      @interpreter.asyncRun resolve
 
   callScriptMethod : ( delegate, fn, args... ) =>
     @interpreter.callScriptMethod delegate, fn, args

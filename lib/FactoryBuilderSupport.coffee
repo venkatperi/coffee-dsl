@@ -4,7 +4,8 @@ log = require('taglog') 'FactoryBuilderSupport'
 getClass = require 'what-class'
 {inspect} = require './util/util'
 rek = require 'rekuire'
-log = rek('logger')(require('path').basename(__filename).split('.')[0])
+log = rek('logger')(require('path').basename(__filename).split('.')[ 0 ])
+errors = require './util/errors'
 #log.level 'verbose'
 
 CURRENT_NODE = '_CURRENT_NODE_'
@@ -80,10 +81,10 @@ class FactoryBuilderSupport extends JSInterpreter
 
   createNode : ( name, attr, value ) =>
     log.v 'createNode', name
-    
+
     factory = @proxyBuilder.resolveFactory name
     unless factory?
-      throw new Error "Missing method: #{name}, #{inspect attr}"
+      throw new errors.FactoryNotFound name : name, attr : attr
 
     @proxyBuilder.context.set CURRENT_FACTORY, factory
     @proxyBuilder.context.set CURRENT_NAME, name
@@ -95,8 +96,8 @@ class FactoryBuilderSupport extends JSInterpreter
         log.w "Factory for #{name} returned null."
         return
     catch err
-      console.log err
-      throw new Error "Failed to create component for #{name}.\n#{err.message}"
+      @emit 'error', err
+      throw new errors.InstantiationFailed err, nodeType : name
 
     @proxyBuilder.postInstantiate name, attr, node
     #@proxyBuilder.handleNodeAttributes node, attr
@@ -123,8 +124,8 @@ class FactoryBuilderSupport extends JSInterpreter
       if list.length
         if typeof list[ 0 ] is 'string'
           arg = list.shift()
-          
-      if list.length and !isFunction(list[ 0 ]) 
+
+      if list.length and !isFunction(list[ 0 ])
         namedArgs = list.shift()
 
       if list.length and isFunction list[ list.length - 1 ]
@@ -163,14 +164,14 @@ class FactoryBuilderSupport extends JSInterpreter
             log.v "Configuring node: #{name}"
             @callScriptMethod node, closure
           catch err
-            console.log err
+            @emit 'error', err
+            throw errors.ConfigureFailed err,
+              nodeType : name, arg : arg, namedArgs : namedArgs
           finally
             @proxyBuilder.popContext()
 
       @proxyBuilder.nodeCompleted current, node
       @proxyBuilder.postNodeCompletion current, node
-    catch err
-      console.log err
     finally
       if needToPopContext
         @proxyBuilder.popContext()
@@ -218,11 +219,13 @@ class FactoryBuilderSupport extends JSInterpreter
     try
       @proxyBuilder.doInvokeMethod methodName, name, args
     catch err
+      @emit 'error', err
       if previousContext in @contexts
         ctx = @proxyBuilder.context
         while (ctx and ctx != previousContext)
           @proxyBuilder.popContext()
           ctx = @proxyBuilder.context
+      @emit 'error', err
       throw err
     undefined
 

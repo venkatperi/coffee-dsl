@@ -8,11 +8,13 @@
   "preferGlobal": false,
   "description": "NEEDS DESCRIPTION",
   "dependencies": {
+    "error": "^7.0.2",
     "esprima": "^2.7.2",
     "esquery": "^0.4.0",
     "jsome": "^2.3.24",
     "json-stringify-safe": "^5.0.1",
     "pretty-hrtime": "^1.0.2",
+    "q": "^1.4.1",
     "rekuire": "^0.1.9",
     "taglog": "^1.1.0",
     "tosource": "^1.0.0",
